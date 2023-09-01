@@ -1,4 +1,5 @@
 import array
+import platform
 from pathlib import Path
 from textwrap import dedent
 
@@ -448,6 +449,11 @@ def prototype(cfg, bg_file=_IMG_CITY):
 
 @scene(controls=dict(source=scene.File()))
 def scopes(cfg, source=_VID_PIPER):
+    # FIXME this check is not sufficient when cross-building a scene
+    if platform.system() == "Darwin" and cfg.backend == "opengl":
+        cfg.aspect_ratio = (1, 1)
+        return ngl.Text("macOS OpenGL\nimplementation\ndoesn't support\ncompute shaders\n:(", fg_color=(1, 0.3, 0.3))
+
     m = MediaInfo.from_filename(source)
     cfg.duration = m.duration
     cfg.aspect_ratio = (m.width, m.height)

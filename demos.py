@@ -4,7 +4,7 @@ from pathlib import Path
 from textwrap import dedent
 
 import pynopegl as ngl
-from pynopegl_utils.misc import MediaInfo, SceneCfg, scene
+from pynopegl_utils.misc import MediaInfo
 from pynopegl_utils.toolbox.colors import COLORS
 from pynopegl_utils.toolbox.grid import autogrid_simple
 
@@ -21,8 +21,8 @@ _FONT_SHIPPORI = (_ASSETS_DIR / "ShipporiMincho-Regular.ttf").as_posix()
 _FONT_UBUNTU = (_ASSETS_DIR / "Ubuntu-Light.ttf").as_posix()
 
 
-@scene(compat_specs="~=0.9")
-def audiotex(cfg: SceneCfg):
+@ngl.scene(compat_specs="~=0.9")
+def audiotex(cfg: ngl.SceneCfg):
     media = MediaInfo.from_filename(_VID_ROYAUME)
     cfg.duration = media.duration
     cfg.aspect_ratio = (media.width, media.height)
@@ -104,8 +104,8 @@ def audiotex(cfg: SceneCfg):
     return render
 
 
-@scene(compat_specs="~=0.9")
-def compositing(cfg: SceneCfg):
+@ngl.scene(compat_specs="~=0.9")
+def compositing(cfg: ngl.SceneCfg):
     cfg.aspect_ratio = (1, 1)
     cfg.duration = 6
 
@@ -194,8 +194,8 @@ def compositing(cfg: SceneCfg):
     return autogrid_simple(scenes)
 
 
-@scene(compat_specs="~=0.9", controls=dict(dim=scene.Range(range=[1, 50])))
-def cropboard(cfg: SceneCfg, dim=32):
+@ngl.scene(compat_specs="~=0.9", controls=dict(dim=ngl.scene.Range(range=[1, 50])))
+def cropboard(cfg: ngl.SceneCfg, dim=32):
     m0 = MediaInfo.from_filename(_VID_BBB)
     cfg.duration = 10
     cfg.aspect_ratio = (m0.width, m0.height)
@@ -267,8 +267,8 @@ def cropboard(cfg: SceneCfg, dim=32):
     return render
 
 
-@scene(compat_specs="~=0.9", controls=dict(n=scene.Range(range=[2, 10])))
-def fibo(cfg: SceneCfg, n=8):
+@ngl.scene(compat_specs="~=0.9", controls=dict(n=ngl.scene.Range(range=[2, 10])))
+def fibo(cfg: ngl.SceneCfg, n=8):
     cfg.duration = 5.0
     cfg.aspect_ratio = (1, 1)
 
@@ -309,7 +309,7 @@ def fibo(cfg: SceneCfg, n=8):
     return root
 
 
-@scene(compat_specs="~=0.9")
+@ngl.scene(compat_specs="~=0.9")
 def japanese_haiku(cfg):
     m0 = MediaInfo.from_filename(_IMG_TORII)
     cfg.duration = 9.0
@@ -373,7 +373,7 @@ def japanese_haiku(cfg):
     return ngl.Group(children=(bg, bg_filter, text))
 
 
-@scene(compat_specs="~=0.9", controls=dict(bg_file=scene.File()))
+@ngl.scene(compat_specs="~=0.9", controls=dict(bg_file=ngl.scene.File()))
 def prototype(cfg, bg_file=_IMG_CITY):
     m0 = MediaInfo.from_filename(bg_file)
     cfg.aspect_ratio = (m0.width, m0.height)
@@ -447,7 +447,7 @@ def prototype(cfg, bg_file=_IMG_CITY):
     return ngl.Group(children=(bg, text))
 
 
-@scene(compat_specs="~=0.9", controls=dict(source=scene.File()))
+@ngl.scene(compat_specs="~=0.9", controls=dict(source=ngl.scene.File()))
 def scopes(cfg, source=_VID_PIPER):
     # FIXME this check is not sufficient when cross-building a scene
     if platform.system() == "Darwin" and cfg.backend == "opengl":

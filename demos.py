@@ -5,7 +5,6 @@ from textwrap import dedent
 
 import pynopegl as ngl
 from pynopegl_utils.misc import load_media
-from pynopegl_utils.toolbox.colors import COLORS
 
 _ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
@@ -154,10 +153,10 @@ def compositing(cfg: ngl.SceneCfg):
 
     for op in operators:
         A = ngl.Render(quad, prog, label="A")
-        A.update_frag_resources(color=ngl.UniformVec3(value=COLORS.azure), off=A_off)
+        A.update_frag_resources(color=ngl.UniformVec3(value=(0.0, 0.5, 1.0)), off=A_off)
 
         B = ngl.Render(quad, prog, label="B", blending=op)
-        B.update_frag_resources(color=ngl.UniformVec3(value=COLORS.orange), off=B_off)
+        B.update_frag_resources(color=ngl.UniformVec3(value=(1.0, 0.5, 0.0)), off=B_off)
 
         bg = ngl.RenderColor(blending="dst_over")
 
@@ -169,7 +168,7 @@ def compositing(cfg: ngl.SceneCfg):
         label_pad = 0.1
         label = ngl.Text(
             op,
-            fg_color=COLORS.black,
+            fg_color=(0, 0, 0),
             bg_color=(0.8, 0.8, 0.8),
             bg_opacity=1,
             box_corner=(label_pad / 2 - 1, 1 - label_h - label_pad / 2, 0),

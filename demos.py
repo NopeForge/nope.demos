@@ -4,7 +4,7 @@ from pathlib import Path
 from textwrap import dedent
 
 import pynopegl as ngl
-from pynopegl_utils.misc import MediaInfo
+from pynopegl_utils.misc import load_media
 from pynopegl_utils.toolbox.colors import COLORS
 from pynopegl_utils.toolbox.grid import autogrid_simple
 
@@ -23,7 +23,7 @@ _FONT_UBUNTU = (_ASSETS_DIR / "Ubuntu-Light.ttf").as_posix()
 
 @ngl.scene(compat_specs="~=0.9")
 def audiotex(cfg: ngl.SceneCfg):
-    media = MediaInfo.from_filename(_VID_ROYAUME)
+    media = load_media(cfg, _VID_ROYAUME)
     cfg.duration = media.duration
     cfg.aspect_ratio = (media.width, media.height)
 
@@ -196,7 +196,7 @@ def compositing(cfg: ngl.SceneCfg):
 
 @ngl.scene(compat_specs="~=0.9", controls=dict(dim=ngl.scene.Range(range=[1, 50])))
 def cropboard(cfg: ngl.SceneCfg, dim=32):
-    m0 = MediaInfo.from_filename(_VID_BBB)
+    m0 = load_media(cfg, _VID_BBB)
     cfg.duration = 10
     cfg.aspect_ratio = (m0.width, m0.height)
 
@@ -311,7 +311,7 @@ def fibo(cfg: ngl.SceneCfg, n=8):
 
 @ngl.scene(compat_specs="~=0.9")
 def japanese_haiku(cfg):
-    m0 = MediaInfo.from_filename(_IMG_TORII)
+    m0 = load_media(cfg, _IMG_TORII)
     cfg.duration = 9.0
     cfg.aspect_ratio = (m0.width, m0.height)
 
@@ -375,7 +375,7 @@ def japanese_haiku(cfg):
 
 @ngl.scene(compat_specs="~=0.9", controls=dict(bg_file=ngl.scene.File()))
 def prototype(cfg, bg_file=_IMG_CITY):
-    m0 = MediaInfo.from_filename(bg_file)
+    m0 = load_media(cfg, bg_file)
     cfg.aspect_ratio = (m0.width, m0.height)
 
     delay = 1.5  # delay before looping
@@ -454,7 +454,7 @@ def scopes(cfg, source=_VID_PIPER):
         cfg.aspect_ratio = (1, 1)
         return ngl.Text("macOS OpenGL\nimplementation\ndoesn't support\ncompute shaders\n:(", fg_color=(1, 0.3, 0.3))
 
-    m = MediaInfo.from_filename(source)
+    m = load_media(cfg, source)
     cfg.duration = m.duration
     cfg.aspect_ratio = (m.width, m.height)
 

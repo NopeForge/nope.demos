@@ -150,17 +150,7 @@ def compositing(cfg: ngl.SceneCfg):
     B_off = ngl.AnimatedVec2(B_off_kf)
 
     scenes = []
-    operators = [
-        "src_over",
-        "dst_over",
-        "src_out",
-        "dst_out",
-        "src_in",
-        "dst_in",
-        "src_atop",
-        "dst_atop",
-        "xor",
-    ]
+    operators = ["src_over", "dst_over", "src_out", "dst_out", "src_in", "dst_in", "src_atop", "dst_atop", "xor"]
 
     for op in operators:
         A = ngl.Render(quad, prog, label="A")

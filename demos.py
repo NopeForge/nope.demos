@@ -6,7 +6,6 @@ from textwrap import dedent
 import pynopegl as ngl
 from pynopegl_utils.misc import load_media
 from pynopegl_utils.toolbox.colors import COLORS
-from pynopegl_utils.toolbox.grid import autogrid_simple
 
 _ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
@@ -104,7 +103,7 @@ def audiotex(cfg: ngl.SceneCfg):
     return render
 
 
-@ngl.scene(compat_specs="~=0.9")
+@ngl.scene(compat_specs="~=0.10")
 def compositing(cfg: ngl.SceneCfg):
     cfg.aspect_ratio = (1, 1)
     cfg.duration = 6
@@ -191,7 +190,7 @@ def compositing(cfg: ngl.SceneCfg):
 
         scenes.append(ret)
 
-    return autogrid_simple(scenes)
+    return ngl.GridLayout(scenes, size=(3, 3))
 
 
 @ngl.scene(compat_specs="~=0.9", controls=dict(dim=ngl.scene.Range(range=[1, 50])))
@@ -447,7 +446,7 @@ def prototype(cfg, bg_file=_IMG_CITY):
     return ngl.Group(children=(bg, text))
 
 
-@ngl.scene(compat_specs="~=0.9", controls=dict(source=ngl.scene.File()))
+@ngl.scene(compat_specs="~=0.10", controls=dict(source=ngl.scene.File()))
 def scopes(cfg, source=_VID_PIPER):
     # FIXME this check is not sufficient when cross-building a scene
     if platform.system() == "Darwin" and cfg.backend == "opengl":
@@ -466,4 +465,4 @@ def scopes(cfg, source=_VID_PIPER):
         ngl.RenderWaveform(stats=stats, mode="mixed"),
         ngl.RenderHistogram(stats=stats, mode="parade"),
     ]
-    return autogrid_simple(scenes)
+    return ngl.GridLayout(scenes, size=(2, 2))

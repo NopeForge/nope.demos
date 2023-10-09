@@ -1,12 +1,12 @@
 # README
 
-This repository provides a serie of demos for the Nope Foundry project. The
+This repository provides a serie of demos for the Nope Forge project. The
 easiest way to interact with them is to check them out by loading the `demos.py`
-script into the viewer which can be downloaded on [nope-foundry.org][nope-www].
+script into the viewer which can be downloaded on [nopeforge.org][nope-www].
 
-[nope-www]: https://www.nope-foundry.org
+[nope-www]: https://www.nopeforge.org
 
-![Nope Foundry Viewer](https://www.nope-foundry.org/img/viewer-800.png)
+![Nope Forge Viewer](https://www.nopeforge.org/img/viewer-800.png)
 
 ## Generate all the demos
 

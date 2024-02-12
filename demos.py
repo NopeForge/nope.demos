@@ -15,13 +15,13 @@ _VID_BBB = (_ASSETS_DIR / "bbb.mp4").as_posix()
 _VID_PIPER = (_ASSETS_DIR / "piper.mp4").as_posix()
 _VID_ROYAUME = (_ASSETS_DIR / "le-royaume.mp4").as_posix()
 
-_FONT_SHIPPORI = (_ASSETS_DIR / "ShipporiMincho-Regular.ttf").as_posix()
-_FONT_UBUNTU = (_ASSETS_DIR / "Ubuntu-Light.ttf").as_posix()
+_FONT_SHIPPORI = ngl.FontFace((_ASSETS_DIR / "ShipporiMincho-Regular.ttf").as_posix())
+_FONT_UBUNTU = ngl.FontFace((_ASSETS_DIR / "Ubuntu-Light.ttf").as_posix())
 
 
-@ngl.scene(compat_specs="~=0.10")
+@ngl.scene(compat_specs="~=0.11")
 def audiotex(cfg: ngl.SceneCfg):
-    media = load_media(cfg, _VID_ROYAUME)
+    media = load_media(_VID_ROYAUME)
     cfg.duration = media.duration
     cfg.aspect_ratio = (media.width, media.height)
 
@@ -102,7 +102,7 @@ def audiotex(cfg: ngl.SceneCfg):
     return render
 
 
-@ngl.scene(compat_specs="~=0.10")
+@ngl.scene(compat_specs="~=0.11")
 def compositing(cfg: ngl.SceneCfg):
     cfg.aspect_ratio = (1, 1)
     cfg.duration = 6
@@ -182,9 +182,9 @@ def compositing(cfg: ngl.SceneCfg):
     return ngl.GridLayout(scenes, size=(3, 3))
 
 
-@ngl.scene(compat_specs="~=0.10", controls=dict(dim=ngl.scene.Range(range=[1, 50])))
+@ngl.scene(compat_specs="~=0.11", controls=dict(dim=ngl.scene.Range(range=[1, 50])))
 def cropboard(cfg: ngl.SceneCfg, dim=32):
-    m0 = load_media(cfg, _VID_BBB)
+    m0 = load_media(_VID_BBB)
     cfg.duration = 10
     cfg.aspect_ratio = (m0.width, m0.height)
 
@@ -255,7 +255,7 @@ def cropboard(cfg: ngl.SceneCfg, dim=32):
     return render
 
 
-@ngl.scene(compat_specs="~=0.10", controls=dict(n=ngl.scene.Range(range=[2, 10])))
+@ngl.scene(compat_specs="~=0.11", controls=dict(n=ngl.scene.Range(range=[2, 10])))
 def fibo(cfg: ngl.SceneCfg, n=8):
     cfg.duration = 5.0
     cfg.aspect_ratio = (1, 1)
@@ -297,9 +297,9 @@ def fibo(cfg: ngl.SceneCfg, n=8):
     return root
 
 
-@ngl.scene(compat_specs="~=0.10")
+@ngl.scene(compat_specs="~=0.11")
 def japanese_haiku(cfg):
-    m0 = load_media(cfg, _IMG_TORII)
+    m0 = load_media(_IMG_TORII)
     cfg.duration = 9.0
     cfg.aspect_ratio = (m0.width, m0.height)
 
@@ -317,7 +317,7 @@ def japanese_haiku(cfg):
 
     text = ngl.Text(
         text="減る記憶、\nそれでも増える、\nパスワード",
-        font_files=_FONT_SHIPPORI,
+        font_faces=[_FONT_SHIPPORI],
         fg_color=(1.0, 0.8, 0.6),
         bg_opacity=0.0,
         font_scale=0.6,
@@ -361,9 +361,9 @@ def japanese_haiku(cfg):
     return ngl.Group(children=(bg, bg_filter, text))
 
 
-@ngl.scene(compat_specs="~=0.10", controls=dict(bg_file=ngl.scene.File()))
+@ngl.scene(compat_specs="~=0.11", controls=dict(bg_file=ngl.scene.File()))
 def prototype(cfg, bg_file=_IMG_CITY):
-    m0 = load_media(cfg, bg_file)
+    m0 = load_media(bg_file)
     cfg.aspect_ratio = (m0.width, m0.height)
 
     delay = 1.5  # delay before looping
@@ -391,7 +391,7 @@ def prototype(cfg, bg_file=_IMG_CITY):
         text="Prototype",
         live_id="text",
         bg_opacity=0,
-        font_files=_FONT_UBUNTU,
+        font_faces=[_FONT_UBUNTU],
         aspect_ratio=cfg.aspect_ratio,
         effects=[
             ngl.TextEffect(
@@ -435,14 +435,14 @@ def prototype(cfg, bg_file=_IMG_CITY):
     return ngl.Group(children=(bg, text))
 
 
-@ngl.scene(compat_specs="~=0.10", controls=dict(source=ngl.scene.File()))
+@ngl.scene(compat_specs="~=0.11", controls=dict(source=ngl.scene.File()))
 def scopes(cfg, source=_VID_PIPER):
     # FIXME this check is not sufficient when cross-building a scene
     if platform.system() == "Darwin" and cfg.backend == "opengl":
         cfg.aspect_ratio = (1, 1)
         return ngl.Text("macOS OpenGL\nimplementation\ndoesn't support\ncompute shaders\n:(", fg_color=(1, 0.3, 0.3))
 
-    m = load_media(cfg, source)
+    m = load_media(source)
     cfg.duration = m.duration
     cfg.aspect_ratio = (m.width, m.height)
 

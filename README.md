@@ -4,7 +4,14 @@ This repository provides a serie of demos for the Nope Forge project. The
 easiest way to interact with them is to check them out by loading the `demos.py`
 script into the viewer which can be downloaded on [nopeforge.org][nope-www].
 
+The `main` branch targets the latest release of Nope. If you are using the
+development version instead of the latest release, you need to use the [next]
+branch. Beware that contrary to `main`, the history of the `next` branch may be
+rewritten on a regular basis (so that it's always rebased on the changes that
+happen in `main`).
+
 [nope-www]: https://www.nopeforge.org
+[next]: https://github.com/NopeForge/nope.demos/tree/next
 
 ![Nope Forge Viewer](https://www.nopeforge.org/img/viewer-800.png)
 

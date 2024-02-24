@@ -26,7 +26,7 @@ def _main():
             print(f"{filename.name}: already present, skipping")
             continue
 
-        cfg = SceneCfg(samples=8, medias=[])
+        cfg = SceneCfg(samples=8)
         data = func(cfg)
         scene = data.scene
 

@@ -95,11 +95,11 @@ def audiotex(cfg: ngl.SceneCfg):
 
     p = ngl.Program(vertex=vertex, fragment=fragment)
     p.update_vert_out_vars(var_tex0_coord=ngl.IOVec2(), var_tex1_coord=ngl.IOVec2())
-    render = ngl.Render(q, p)
-    render.update_frag_resources(tex0=audio_tex, tex1=video_tex)
-    render.update_frag_resources(overlay=ngl.UniformFloat(0.6, live_id="overlay", live_min=0, live_max=1))
-    render.update_frag_resources(freq_precision=ngl.UniformInt(7, live_id="freq_precision", live_min=1, live_max=10))
-    return render
+    draw = ngl.Draw(q, p)
+    draw.update_frag_resources(tex0=audio_tex, tex1=video_tex)
+    draw.update_frag_resources(overlay=ngl.UniformFloat(0.6, live_id="overlay", live_min=0, live_max=1))
+    draw.update_frag_resources(freq_precision=ngl.UniformInt(7, live_id="freq_precision", live_min=1, live_max=10))
+    return draw
 
 
 @ngl.scene(compat_specs="~=0.11")
@@ -152,13 +152,13 @@ def compositing(cfg: ngl.SceneCfg):
     operators = ["src_over", "dst_over", "src_out", "dst_out", "src_in", "dst_in", "src_atop", "dst_atop", "xor"]
 
     for op in operators:
-        A = ngl.Render(quad, prog, label="A")
+        A = ngl.Draw(quad, prog, label="A")
         A.update_frag_resources(color=ngl.UniformVec3(value=(0.0, 0.5, 1.0)), off=A_off)
 
-        B = ngl.Render(quad, prog, label="B", blending=op)
+        B = ngl.Draw(quad, prog, label="B", blending=op)
         B.update_frag_resources(color=ngl.UniformVec3(value=(1.0, 0.5, 0.0)), off=B_off)
 
-        bg = ngl.RenderColor(blending="dst_over")
+        bg = ngl.DrawColor(blending="dst_over")
 
         # draw A in current FBO, then draw B with the current operator, and
         # then result goes over the white background
@@ -242,15 +242,15 @@ def cropboard(cfg: ngl.SceneCfg, dim=32):
     ]
     utime = ngl.AnimatedFloat(utime_animkf)
 
-    render = ngl.Render(q, p, nb_instances=dim**2)
-    render.update_frag_resources(tex0=t)
-    render.update_vert_resources(time=utime)
-    render.update_instance_attributes(
+    draw = ngl.Draw(q, p, nb_instances=dim**2)
+    draw.update_frag_resources(tex0=t)
+    draw.update_vert_resources(time=utime)
+    draw.update_instance_attributes(
         uv_offset=ngl.BufferVec2(data=uv_offset_buffer),
         translate_a=ngl.BufferVec2(data=translate_a_buffer),
         translate_b=ngl.BufferVec2(data=translate_b_buffer),
     )
-    return render
+    return draw
 
 
 @ngl.scene(compat_specs="~=0.11", controls=dict(n=ngl.scene.Range(range=[2, 10])))
@@ -274,7 +274,7 @@ def fibo(cfg: ngl.SceneCfg, n=8):
         gray = 1.0 - i / float(n)
         color = (gray, gray, gray)
         q = ngl.Quad(orig, (w, 0, 0), (0, w, 0))
-        render = ngl.RenderColor(color, geometry=q)
+        draw = ngl.DrawColor(color, geometry=q)
 
         new_g = ngl.Group()
         animkf = [
@@ -288,7 +288,7 @@ def fibo(cfg: ngl.SceneCfg, n=8):
         else:
             root = rot
         g = new_g
-        new_g.add_children(render)
+        new_g.add_children(draw)
         orig = (orig[0] + w, orig[1] + w, 0)
 
     assert root is not None
@@ -307,11 +307,11 @@ def japanese_haiku(cfg):
         ngl.AnimKeyFrameFloat(cfg.duration - 1, 0.4),
         ngl.AnimKeyFrameFloat(cfg.duration, 0.0),
     ]
-    bg_filter = ngl.RenderColor(color=(0, 0, 0), opacity=ngl.AnimatedFloat(bgalpha_animkf), blending="src_over")
+    bg_filter = ngl.DrawColor(color=(0, 0, 0), opacity=ngl.AnimatedFloat(bgalpha_animkf), blending="src_over")
 
     media = ngl.Media(m0.filename)
     tex = ngl.Texture2D(data_src=media)
-    bg = ngl.RenderTexture(tex)
+    bg = ngl.DrawTexture(tex)
 
     text = ngl.Text(
         text="減る記憶、\nそれでも増える、\nパスワード",
@@ -419,7 +419,7 @@ def prototype(cfg, bg_file=_IMG_CITY):
 
     media = ngl.Media(m0.filename)
     tex = ngl.Texture2D(data_src=media)
-    bg = ngl.RenderTexture(tex)
+    bg = ngl.DrawTexture(tex)
 
     bg_scale = [1.0, 1.4]
     bg_animkf = [
@@ -445,9 +445,9 @@ def scopes(cfg, source=_VID_PIPER):
     texture = ngl.Texture2D(data_src=ngl.Media(m.filename))
     stats = ngl.ColorStats(texture)
     scenes = [
-        ngl.RenderTexture(texture),
-        ngl.RenderWaveform(stats=stats, mode="parade"),
-        ngl.RenderWaveform(stats=stats, mode="mixed"),
-        ngl.RenderHistogram(stats=stats, mode="parade"),
+        ngl.DrawTexture(texture),
+        ngl.DrawWaveform(stats=stats, mode="parade"),
+        ngl.DrawWaveform(stats=stats, mode="mixed"),
+        ngl.DrawHistogram(stats=stats, mode="parade"),
     ]
     return ngl.GridLayout(scenes, size=(2, 2))

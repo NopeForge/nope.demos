@@ -20,7 +20,7 @@ happen in `main`).
 In order to export video files of all the demos, one can run the following:
 
 ```sh
-python render.py
+ngl-export demos.py -r 1080p -p mp4_h264_420 -o output
 ```
 
 To update only one file, remove it from the `output` directory and run that
